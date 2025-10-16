@@ -1,32 +1,30 @@
-const veiculo = {
-    modelo:"320i",
-    consumoMedio: 8.5,
-};
+document.getElementById('calcular').addEventListener('click', () => {
+  const tipo = document.querySelector('input[name="combustivel"]:checked').value;
+  const consumo = parseFloat(document.getElementById('consumo').value);
+  const velocidade = parseFloat(document.getElementById('velocidade').value);
+  const tempo = parseFloat(document.getElementById('tempo').value);
 
-const combustivel = {
-    tipo:"",
-     precoEtanol: 3.899,
-     precoGasolina: 5.999,
-}
+  if (isNaN(consumo) || isNaN(velocidade) || isNaN(tempo)) {
+    alert("Preencha todos os campos corretamente!");
+    return;
+  }
 
-const viagem={
-    velocidadeMedia:"",
-    duracao:"",
-    percurso:"",
-};
+  const precoEtanol = 3.899;
+  const precoGasolina = 5.999;
 
-viagem.duracao = 9;
-viagem.velocidadeMedia = 120;
-viagem.percurso = `${viagem.duracao * viagem.velocidadeMedia}`;
+  const percurso = velocidade * tempo;
+  const litros = percurso / consumo;
 
-viagem.consumoLitros = Math.round (viagem.percurso / veiculo.consumoMedio);
+  let custo = 0;
+  if (tipo === "etanol") {
+    custo = litros * precoEtanol;
+  } else {
+    custo = litros * precoGasolina;
+  }
 
-combustivel.tipo = 1;
-
-if(combustivel.tipo === 0) {
-    viagem.custoEmReais = (viagem.consumoLitros * combustivel.precoEtanol).toLocaleString('pt-BR',{style: "currency", currency: "BRL" });
-} else {
-    viagem.custoEmReais = (viagem.consumoLitros * combustivel.precoGasolina).toLocaleString('pt-BR',{style: "currency", currency: "BRL" });
-}
- 
-console.log(viagem);
+  document.getElementById('resultado').innerHTML = `
+    <p><strong>Distância percorrida:</strong> ${percurso.toFixed(1)} Km</p>
+    <p><strong>Combustível gasto:</strong> ${litros.toFixed(1)} L</p>
+    <p><strong>Custo total:</strong> ${custo.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
+  `;
+});
